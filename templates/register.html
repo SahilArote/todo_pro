@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% load socialaccount %}
+{% block title %}Register{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-6 col-md-8">
+    <div class="card shadow-lg border-0 rounded-4">
+      <div class="card-header bg-primary text-white text-center rounded-top-4">
+        <h2 class="mb-1"><i class="bi bi-person-plus-fill me-2"></i>Create Your Account</h2>
+        <p class="mb-0 small">Start your journey with us today</p>
+      </div>
+      <div class="card-body p-4">
+        <form method="post" novalidate>
+          {% csrf_token %}
+          {{ form.as_p }}
+          <button type="submit" class="btn btn-success w-100 py-2 fw-bold">
+            <i class="bi bi-check-circle me-2"></i>Register
+          </button>
+        </form>
+
+        <hr class="my-4">
+
+        <p class="text-center mb-2">Or sign up with Google:</p>
+        <a class="btn btn-outline-danger w-100 py-2 fw-bold" href="{% provider_login_url 'google' process='signup' %}">
+          <i class="bi bi-google me-2"></i>Sign up with Google
+        </a>
+      </div>
+      <div class="card-footer text-center bg-light rounded-bottom-4">
+        <small class="text-dark">Already have an account? 
+          <a href="{% url 'local_login' %}" class="text-primary fw-semibold">Login</a>
+        </small>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}All History{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+  <h2 class="text-center text-primary mb-4"><i class="bi bi-clock-history me-2"></i>All Todos History</h2>
+
+  <table class="table table-bordered table-hover align-middle">
+    <thead class="table-dark">
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Task</th>
+        <th scope="col">History Date</th>
+        <th scope="col">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for todo in todos %}
+        {% for record in todo.history.all %}
+          <tr>
+            <td>{{ forloop.parentloop.counter }}</td>
+            <td>{{ todo.title }}</td>
+            <td>{{ record.history_date|date:"M d, Y H:i" }}</td>
+            <td>
+              {% if record.history_type == "+" %}
+                <span class="badge bg-success">Created</span>
+              {% elif record.history_type == "~" %}
+                <span class="badge bg-warning text-dark">Updated</span>
+              {% elif record.history_type == "-" %}
+                <span class="badge bg-danger">Deleted</span>
+              {% else %}
+                <span class="badge bg-secondary">Changed</span>
+              {% endif %}
+            </td>
+          </tr>
+        {% empty %}
+          <tr>
+            <td colspan="5" class="text-center text-muted">No history entries found.</td>
+          </tr>
+        {% endfor %}
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

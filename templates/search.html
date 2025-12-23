@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}Search Results{% endblock %}
+
+{% block content %}
+
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Search Results</h2>
+    
+    <!-- Search Form -->
+    <form method="GET" action="{% url 'search' %}" class="d-flex mb-4">
+        <input type="text" name="q" class="form-control me-2" placeholder="Search todos..." value="{{ request.GET.q }}">
+        <button class="btn btn-primary">Search</button>
+    </form>
+    
+    {% if todos %}
+    <!-- Todo Table -->
+    <table class="table table-bordered table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>#</th>
+                <th>Task</th>
+                <th>Description</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        
+        <tbody>
+            {% for todo in todos %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                
+                <td class="{% if todo.completed %}text-decoration-line-through text-muted{% endif %}">
+                    {{ todo.title }}
+                </td>
+
+                <td class="{% if todo.completed %}text-decoration-line-through text-muted{% endif %}">
+                    {{ todo.description }}
+                </td>
+
+                <td>
+                    {% if todo.completed %}
+                    <span class="badge bg-success">Completed</span>
+                    {% else %}
+                    <span class="badge bg-warning">Pending</span>
+                    {% endif %}
+                </td>
+
+                <td>
+                    <a href="{% url 'toggle' todo.id %}" class="btn btn-sm btn-info">Toggle</a>
+                    <a href="{% url 'delete' todo.id %}" class="btn btn-sm btn-danger">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {% else %}
+        <p class="text-center">No todos found matching your search.</p>
+    {% endif %}
+</div>
+
+{% endblock %}

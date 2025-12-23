@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}History for {{ todo.title }}{% endblock %}
+
+{% block content %}
+  <h2>History for "{{ todo.title }}"</h2>
+  <ul>
+    {% for record in todo.history.all %}
+      <li>{{ record.history_date }} — {{ record.history_type }}{% if record.history_user %} by {{ record.history_user }}{% endif %}</li>
+    {% empty %}
+      <li>No history entries</li>
+    {% endfor %}
+  </ul>
+{% endblock %}

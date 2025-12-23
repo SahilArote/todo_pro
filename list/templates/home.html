@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Todo App{% endblock %}
+
+{% block content %}
+
+
+
+
+
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Todo Application</h2>
+    <!-- Create Form -->
+    <form method="POST" class="d-flex mb-4">
+        {% csrf_token %}
+        <input type="text" name="title" class="form-control me-2" placeholder="Add new todo..." required>
+        <textarea name="description" class="form-control me-2" placeholder="Description"></textarea>
+        <button class="btn btn-primary">Add</button>
+    </form>
+    
+    <!-- Todo Table -->
+    <table class="table table-bordered table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>#</th>
+                <th>Task</th>
+                <th>Description</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        
+        <tbody>
+            {% for todo in todos %}
+            <tr>
+                
+                <td>{{ forloop.counter }}</td>
+                
+                <td class="{% if todo.completed %}text-decoration-line-through text-muted{% endif %}">
+                    {{ todo.title }}
+                </td>
+                
+                <td class="{% if todo.completed %}text-decoration-line-through text-muted{% endif %}">
+                    {{ todo.description }}
+                </td>
+                
+                <td>
+                    {% if todo.completed %}
+                    <span class="badge bg-success">Completed</span>
+                    {% else %}
+                    <span class="badge bg-warning">Pending</span>
+                    {% endif %}
+                </td>
+                
+                <td>
+                    <a href="{% url 'toggle' todo.id %}" class="btn btn-sm btn-info">Toggle</a>
+                    <a href="{% url 'delete' todo.id %}" class="btn btn-sm btn-danger">Delete</a>
+                </td>
+                
+            </tr>
+            
+            {% empty %}
+            <tr>
+                <td colspan="5" class="text-center text-muted">No tasks yet.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+    
+    {% endblock %}
+    

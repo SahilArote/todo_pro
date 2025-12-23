@@ -1,0 +1,104 @@
+{% load static %}
+{% load socialaccount %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Todo App{% endblock %}</title>
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="{% static 'style.css' %}">
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+
+  <style>
+    body {
+      background: linear-gradient(to right, #f8f9fa, #e9ecef);
+      font-family: 'Segoe UI', sans-serif;
+    }
+    .navbar {
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    .navbar-brand {
+      font-weight: bold;
+      color: #0d6efd !important;
+    }
+    .nav-link {
+      transition: color 0.3s ease;
+    }
+    .nav-link:hover {
+      color: #0d6efd !important;
+    }
+    .btn {
+      margin-left: 5px;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- 🌐 Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="{% url 'home' %}">
+        <i class="bi bi-check2-square me-1"></i> TODO
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarScroll">
+        <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll">
+          <li class="nav-item">
+            <a class="nav-link active" href="{% url 'home' %}">
+              <i class="bi bi-house-door-fill me-1"></i> Home
+            </a>
+          </li>
+          <li class="nav-item">
+            {% if todo %}
+              <a href="{% url 'history' todo.pk %}" class="nav-link">
+                <i class="bi bi-clock-history me-1"></i> History
+              </a>
+            {% else %}
+              <a href="{% url 'history_index' %}" class="nav-link">
+                <i class="bi bi-clock-history me-1"></i> History
+              </a>
+            {% endif %}
+          </li>
+        </ul>
+
+        <!-- 🔑 Auth Section -->
+        <ul class="navbar-nav ms-auto">
+          {% if request.user.is_authenticated %}
+            <li class="nav-item d-flex align-items-center">
+              <span class="me-2 fw-semibold">👋 Hi, {{ request.user.username }}</span>
+              <a href="{% url 'local_logout' %}" class="btn btn-outline-danger">
+                <i class="bi bi-box-arrow-right me-1"></i> Logout
+              </a>
+            </li>
+          {% endif %}
+        </ul>
+
+        <!-- 🔍 Search -->
+        <form class="d-flex ms-3" role="search" method="GET" action="{% url 'search' %}">
+          <input class="form-control me-2" type="search" name="q" placeholder="Search tasks..." aria-label="Search">
+          <button class="btn btn-success" type="submit">
+            <i class="bi bi-search"></i>
+          </button>
+        </form>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 📦 Page Content -->
+  <div class="container py-4">
+    {% block content %}
+    {% endblock %}
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
